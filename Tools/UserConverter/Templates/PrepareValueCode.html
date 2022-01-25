@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>ACE in Action</title>
+	<style type="text/css" media="screen">
+		body {
+			overflow: hidden;
+		}
+
+		#editor {
+			margin: 0;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+	</style>
+</head>
+<body>
+
+	<pre id="editor">!@#$%^&*</pre>
+	<script src="https://pagecdn.io/lib/ace/1.4.12/ace.js" crossorigin="anonymous" integrity="sha256-Q9hnBpgBFstzZOr+OKFOWZWfcF5nFXO8Qz48Nmndo6U="></script>
+	<script src="https://pagecdn.io/lib/ace/1.4.12/snippets/csharp.js" crossorigin="anonymous"></script>
+	<script src="https://pagecdn.io/lib/ace/1.4.12/theme-tomorrow_night_eighties.js" crossorigin="anonymous"></script>
+	<script src="https://pagecdn.io/lib/ace/1.4.12/ext-language_tools.js" crossorigin="anonymous"></script>
+	<script>
+		var langTools = ace.require("ace/ext/language_tools");
+		var editor = ace.edit("editor");
+
+		editor.setTheme("ace/theme/tomorrow_night_eighties");
+		editor.setShowPrintMargin(false);
+		editor.setAutoScrollEditorIntoView(true);
+
+		editor.session.setMode("ace/mode/csharp");
+		editor.session.setTabSize(4);
+		editor.session.setUseSoftTabs(false);
+		editor.session.setUseWrapMode(true);
+
+		editor.setOptions({
+			enableBasicAutocompletion: true,
+			enableSnippets: true,
+			enableLiveAutocompletion: true
+		});
+
+		document.getElementById('editor').style.fontSize = '18px';
+
+		editor.commands.addCommand({
+			name: 'saveCommand',
+			bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+			exec: function (editor) {
+				window.chrome.webview.postMessage(editor.getValue());
+			},
+			readOnly: true // false if this command should not apply in readOnly mode
+		});
+	</script>
+</body>
+</html>
